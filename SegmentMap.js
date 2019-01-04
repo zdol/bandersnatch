@@ -1,4 +1,4 @@
-﻿let SegmentMap = {
+﻿SegmentMap = {
   "type": "branching",
   "segments": {
     "1A": {

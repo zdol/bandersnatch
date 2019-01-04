@@ -1,4 +1,4 @@
-let bandersnatch = {
+bandersnatch = {
   "videos": {
     "80988062": {
       "interactiveVideoMoments": {
