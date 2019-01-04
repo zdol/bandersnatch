@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bandersnatch</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <script src="https://unpkg.com/vue"></script>
+  <script src="bandersnatch.js"></script> <!-- bandersnatch object https://gist.githubusercontent.com/jonluca/860f3f445e7d84054822276fd058301a -->
+  <script src="SegmentMap.js"></script> <!-- SegmentMap object https://github.com/jolbol1/Bandersnatch/blob/master/SegmentMap.json-->
+</head>
+<body>
+    <div id="app">
+      <h1 class="text-center">Bandersnatch: choice points</h1>
+      <div class="d-flex bd-highlight container">
+          <div class="p-2 flex-fill bd-highlight text-center"><a href="index.html">momentsBySegment</a></div>
+          <div class="p-2 flex-fill bd-highlight text-center"><a href="choices.html">choicePoints</a></div>
+      </div>
+      <div class="container-fluid">
+        <div class="row">
+            <div class="col-3 text-center" v-for="choicePoint in bandersnatch.videos['80988062'].interactiveVideoMoments.value.choicePointNavigatorMetadata.choicePointsMetadata.choicePoints">
+                <img class="img-fluid" v-bind:src="choicePoint | getImageFor">
+                <a v-bind:href="choicePoint | getNetflixLink" class="btn btn-primary" target="_blank"> {{ choicePoint.description}} </a>
+                <ul>
+                    <li v-for="choice in choicePoint.choices">
+                        {{ choice }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <script>
+        Vue.filter('capitalize', function (value) {
+            if (!value) return ''
+            value = value.toString()
+            return value.toUpperCase()
+        })
+        Vue.filter('webptopng', function (value) {
+            if (!value) return ''
+            return value.replace('url(', '')
+                        .replace('webp)', '.png');
+        })
+        Vue.filter('getImageFor', function(choicePoint) {
+            if (!choicePoint.image) return 'nf.png'
+            return choicePoint.image.styles.backgroundImage.replace('url(', '')
+                        .replace('webp)', 'png');
+        })
+        Vue.filter('getNetflixLink', function(choicePoint) {
+            if (!choicePoint.startTimeMs) return ''
+            return 'https://www.netflix.com/watch/80988062?t=' + Math.round(choicePoint.startTimeMs / 1000);
+        })
+        var app = new Vue({
+        el: '#app',
+        data: {
+            message: 'Hello Vue!',
+            bandersnatch: bandersnatch,
+            SegmentMap: SegmentMap,
+        }
+        })
+  </script>
+</body>
+</html>
